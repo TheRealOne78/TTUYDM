@@ -1,0 +1,20 @@
+                                  == SOURCE ==
+
+You can access the source code for TTUYDM through git or web interface at
+<https://github.com/TheRealOne78/TTUYDM>.
+
+
+                        == TERMS OF USE AND LICENSING ==
+
+All code in this repository is licensed under the GNU General Public License
+version 3 or later.  A copy of the GPLv3+ license can be found at
+'/Licenses/LICENSE.GPLv3.txt' or on the GNU website at
+<https://www.gnu.org/licenses/gpl-3.0.en.html>.  If you have difficulty locating
+the license, please contact the Free Software Foundation through E-Mail at
+<licensing@gnu.org>.
+
+Third-party libraries are credited in the 'LIST OF OTHER ASSETS AND AUTHORS'
+section, along with the license name.
+
+
+                     == LIST OF OTHER ASSETS AND AUTHORS ==
