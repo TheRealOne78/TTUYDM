@@ -18,6 +18,14 @@
 #ifndef __SIGNAL_HANDLERS_H__
 #define __SIGNAL_HANDLERS_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void handler_sigint(int signum);
+
+#ifdef __cplusplus
+}
+#endif // extern "C" closing bracket
 
 #endif // __SIGNAL_HANDLERS_H__

@@ -26,8 +26,9 @@
  * This makes more sense for a Diplay Manager, because it's supposed to be a
  * daemon, not command-line program.
  *
- * See <https://en.wikipedia.org/wiki/Signal_(IPC)> or signal(7) manual if you
- * don't know what a signal is.
+ * See https://en.wikipedia.org/wiki/Signal_(IPC)> or
+ * [signal(7)](https://www.man7.org/linux/man-pages/man7/signal.7.html) manual
+ * if you don't know what a signal is.
  *
  * @param signum The Signal number. This should be SIGINT.
  * @return None.
