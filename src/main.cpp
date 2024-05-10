@@ -15,8 +15,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "signal-handlers.h"
+#include "ttuydm.hpp"
 
 int main(void) {
+    Ttuydm ttuydm;
 
 }
