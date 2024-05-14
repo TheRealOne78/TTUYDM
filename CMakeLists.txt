@@ -9,6 +9,12 @@ cmake_minimum_required(VERSION 3.25)
 project(ttuydm
   LANGUAGES C CXX)
 
+# Set C++ standard to 2011
+## Due to:
+### * std::future
+### * std::async
+set(CMAKE_CXX_STANDARD 11)
+
 # Set project version
 set(PROJECT_VERSION "0.0.1-alpha")
 
