@@ -19,5 +19,4 @@
 
 int main(void) {
     Ttuydm ttuydm;
-
 }
