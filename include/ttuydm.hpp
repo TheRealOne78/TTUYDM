@@ -3,7 +3,11 @@
 
 class Ttuydm {
     public:
+        /* Constructors */
         Ttuydm();
+
+        /* Deconstructor */
+        ~Ttuydm();
 
     private:
 

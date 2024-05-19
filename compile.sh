@@ -11,7 +11,7 @@ WARN="["$YELLOW"w"$ENDCOLOR"]"
 ERR="["$RED"e"$ENDCOLOR"]"
 
 # Compiling
-printf "$INFO Compiling with $(nproc) threads...\n"
+printf "$INFO Compiling with CMake with $(nproc) threads...\n"
 ## BSD family
 if [ -x "$(command -v pkg)" ] || [ -x "$(command -v pkg_add)" ] || [ -x "$(command -v pkgin)" ]; then
   gmake -j$(nproc)

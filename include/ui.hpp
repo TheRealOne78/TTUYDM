@@ -41,13 +41,13 @@ class UI : public User {
 
         // |> WINDOWS
         /* Bars */
-        WINDOW top_bar_window, bottom_bar_window;
+        WINDOW *top_bar_window, *bottom_bar_window;
 
         /* Login entries */
-        WINDOW entries_window;
+        WINDOW *entries_window;
 
         /* Help menu */
-        WINDOW help_menu_window;
+        WINDOW *help_menu_window;
         // <|
 };
 
