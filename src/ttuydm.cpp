@@ -1,7 +1,9 @@
 #include "ttuydm.hpp"
 
-Ttuydm::Ttuydm() {
+#include "ui.hpp"
 
+Ttuydm::Ttuydm() {
+    UI ui;
 }
 
 Ttuydm::~Ttuydm() {

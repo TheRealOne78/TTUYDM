@@ -17,38 +17,44 @@ class UI : public User {
 
         /* = Draw = */
         /* Screens */
-        void drawHome(WINDOW*);
-        void drawHelp(WINDOW*);
+        void drawHome();
+        void drawHelp();
         /* Bars */
-        void drawHeaderBar(WINDOW*);
-        void drawFooterBar(WINDOW*);
+        void drawHeaderBar();
+        void drawFooterBar();
         /* Windows */
-        void drawWinCredentials(WINDOW*);
+        void drawWinCredentials();
         /* Requires */
-        void drawTime(WINDOW*);
+        void drawTime(const WINDOW*);
         // |> requires user.hpp
-        void drawPasswordFailedAttempts(WINDOW*);
-        void drawPasswordAttemptsUntillCooldown(WINDOW*);
-        void drawPasswordCooldown(WINDOW*);
+        void drawPasswordFailedAttempts(const WINDOW*);
+        void drawPasswordAttemptsUntilCooldown(const WINDOW*);
+        void drawPasswordCooldown(const WINDOW*);
+
+        void refreshMaxResolution();
+
+        void wPrintWrap(const WINDOW*, const int, const int, const int, const char*);
         // <|
 
         /* == DATA == */
         int x_max, y_max;
-        int x_current_pos, y_curent_pos;
 
         char* entered_password;
         uint64_t entered_password_length;
 
         // |> WINDOWS
         /* Bars */
-        WINDOW *top_bar_window, *bottom_bar_window;
+        const WINDOW *TOP_BAR_WINDOW, *BOTTOM_BAR_WINDOW;
 
         /* Login entries */
-        WINDOW *entries_window;
+        const WINDOW *ENTRIES_WINDOW;
 
         /* Help menu */
-        WINDOW *help_menu_window;
+        const WINDOW *HELP_MENU_WINDOW;
         // <|
+
+        /* Count of lines in the help menu */
+        const uint8_t HELP_STR_LINES_COUNT;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT

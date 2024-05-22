@@ -19,10 +19,18 @@
 #define __SIGNAL_HANDLERS_H__
 
 #ifdef __cplusplus
+
 extern "C" {
 #endif
 
-void handler_sigint(int signum);
+#include "stdbool.h"
+
+    /**
+     * Check if SIGINT was called.
+     */
+    bool IS_SIGINT_TRIGGERED;
+
+    void handler_sigint(int signum);
 
 #ifdef __cplusplus
 }

@@ -34,5 +34,5 @@
  * @return None.
  */
 void handler_sigint(int signum) {
-
+    IS_SIGINT_TRIGGERED = true;
 }
