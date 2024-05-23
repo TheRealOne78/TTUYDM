@@ -18,3 +18,21 @@ section, along with the license name.
 
 
                      == LIST OF OTHER ASSETS AND AUTHORS ==
+
+* NCurses: Copyright (c) 1993-2000,2005-2007 Free Software Foundation, Inc.
+  Licensed under the GNU General Public License (GPL) version 2 or later.
+  View the license at '/Licenses/LICENSE.GPLv2.txt' or on
+  <https://www.gnu.org/licenses/gpl-2.0.html>.  Access the source code of
+  NCurses at <https://invisible-island.net/ncurses/>.
+
+* spdlog: Copyright (c) 2016 Gabi Melman.  Licensed under the MIT license.
+  View the license at '/Licenses/LICENSE.spdlog.MIT' or on
+  <https://mit-license.org>.  Access the source code via git or the web
+  interface at <https://github.com/https://github.com/gabime/spdlog>.
+
+* CMake: Copyright (c) 2000-2024 Kitware, Inc., Insight Software Consortium
+  All rights reserved.
+  The CMake source tree is distributed under terms of the BSD 3-Clause license.
+  View the license at '/Licenses/LICENSE.cmake.BSDv3' or on
+  <https://opensource.org/licenses/BSD-3-Clause>.  Access the source code via
+  git or the web interface at <https://gitlab.kitware.com/cmake/cmake>.
