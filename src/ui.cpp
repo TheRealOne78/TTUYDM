@@ -1,5 +1,7 @@
 #include "ui.hpp"
+#include <string.h>
 #include <curses.h>
+#include <vector>
 
 UI::UI() {
     /* Start NCurses */
@@ -23,7 +25,6 @@ UI::UI() {
     help_menu_window  = newwin(
                                ((y_max/2) - (/2)),
                                ((x_max/2) - (/2)));
-
 }
 
 UI::~UI() {
@@ -37,8 +38,26 @@ UI::~UI() {
     endwin();
 }
 
+void UI::initHelpStr() {
+    help_str->push_back((char*)"[KEYS]");
+    help_str->push_back((char*)"ESC - Return to login screen");
+    help_str->push_back((char*)"Arrow keys - Move between input entries");
+    help_str->push_back((char*)"F1 - See this HELP menu");
+    help_str->push_back((char*)"F12 - Reset all input entries");
+    help_str->push_back((char*)"DEL - Reset selected input (also opposite to Ctrl+G)");
+    help_str->push_back((char*)"Ctrl+G - Show last item");
+    help_str->push_back((char*)"Ctrl+L - Login");
+    help_str->push_back((char*)"\n");
 
-void UI::drawHome() {
+    help_str->push_back((char*)"[BUTTONS]");
+    help_str->push_back((char*)"Reset - Reset all input entries (same as F12)");
+    help_str->push_back((char*)"Login - Login (Same as Ctrl+L)");
+    help_str->push_back((char*)"\n");
+
+    help_str->push_back((char*)"[ENTRIES]");
+    help_str->push_back((char*)"USERNAME - Username credential");
+    help_str->push_back((char*)"PASSWORD - Password credential");
+    help_str->push_back((char*)"SESSION - The session to load after signing in");
 
 }
 
@@ -60,19 +79,16 @@ void UI::drawFooterBar() {
 }
 
 /* Windows */
-void UI::drawWinCredentials() {
+
+void UI::drawTime(WINDOW* win) {
 
 }
 
-void UI::drawTime(WINDOW*) {
+void UI::drawPasswordFailedAttempts(WINDOW* win) {
 
 }
 
-void UI::drawPasswordFailedAttempts(WINDOW*) {
-
-}
-
-void UI::drawPasswordAttemptsUntilCooldown(WINDOW*) {
+void UI::drawPasswordAttemptsUntilCooldown(WINDOW* win) {
 
 }
 
@@ -86,7 +102,7 @@ void UI::drawPasswordAttemptsUntilCooldown(WINDOW*) {
  *
  * @return None.
  */
-void UI::drawPasswordCooldown(WINDOW* window) {
+void UI::drawPasswordCooldown(WINDOW* win) {
 
 }
 
@@ -109,7 +125,7 @@ void UI::refreshMaxResolution() {
 /**
  * @brief Print wrapped string in a window
  *
- * @param WIN The window to print in
+ * @param win The window to print in
  *
  * @param START_X The y start position
  *
@@ -121,7 +137,7 @@ void UI::refreshMaxResolution() {
  *
  * @return None.
  */
-void wPrintWrap(const WINDOW *WIN,
+void wPrintWrap(WINDOW *win,
                 const int START_Y,
                 const int START_X,
                 const int WIDTH,
@@ -131,15 +147,23 @@ void wPrintWrap(const WINDOW *WIN,
     int current_y = START_Y;
 
     for (int i = 0; i < strlen(STR); i++) {
+        /*
+         * Check current width info for each itteration and update the y
+         * position
+         */
         if (current_x - START_X >= WIDTH || STR[i] == '\n') {
             current_y++;
             current_x = START_X;
         }
 
-        if (str[i] != '\n') {
-            mvwaddch(WIN, current_y, current_x, STR[i]);
+        /* Write char-by-char with newline constraint */
+        if (STR[i] != '\n') {
+            mvwaddch(win, current_y, current_x, STR[i]);
             current_x++;
         }
     }
-    wrefresh(WIN);
+
+    /* Render */
+    refresh();
+    wrefresh(win);
 }

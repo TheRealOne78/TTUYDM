@@ -2,6 +2,7 @@
 #define __UI_HPP__
 
 #include <curses.h>
+#include <vector>
 #include "user.hpp"
 
 class UI : public User {
@@ -15,25 +16,26 @@ class UI : public User {
     private:
         /* == METHODS == */
 
+        void initHelpStr();
+
         /* = Draw = */
         /* Screens */
-        void drawHome();
         void drawHelp();
         /* Bars */
         void drawHeaderBar();
         void drawFooterBar();
         /* Windows */
-        void drawWinCredentials();
+        void drawWinEntryCredentials();
         /* Requires */
-        void drawTime(const WINDOW*);
+        void drawTime(WINDOW*);
         // |> requires user.hpp
-        void drawPasswordFailedAttempts(const WINDOW*);
-        void drawPasswordAttemptsUntilCooldown(const WINDOW*);
-        void drawPasswordCooldown(const WINDOW*);
+        void drawPasswordFailedAttempts(WINDOW*);
+        void drawPasswordAttemptsUntilCooldown(WINDOW*);
+        void drawPasswordCooldown(WINDOW*);
 
         void refreshMaxResolution();
 
-        void wPrintWrap(const WINDOW*, const int, const int, const int, const char*);
+        void wPrintWrap(WINDOW*, const int, const int, const int, const char*);
         // <|
 
         /* == DATA == */
@@ -44,17 +46,16 @@ class UI : public User {
 
         // |> WINDOWS
         /* Bars */
-        const WINDOW *TOP_BAR_WINDOW, *BOTTOM_BAR_WINDOW;
+        WINDOW *top_bar_window, *bottom_bar_window;
 
         /* Login entries */
-        const WINDOW *ENTRIES_WINDOW;
+        WINDOW *entries_window;
 
         /* Help menu */
-        const WINDOW *HELP_MENU_WINDOW;
+        WINDOW *help_menu_window;
         // <|
 
-        /* Count of lines in the help menu */
-        const uint8_t HELP_STR_LINES_COUNT;
+        std::vector<char*>* help_str;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT
