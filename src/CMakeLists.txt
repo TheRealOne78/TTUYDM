@@ -18,7 +18,9 @@ target_include_directories("${PROJECT_NAME}" PRIVATE
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_BINARY_DIR}/include")
 
-target_link_libraries(${PROJECT_NAME} ${CURSES_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}
+  ${CURSES_LIBRARIES}
+  spdlog::spdlog)
 
 # Set the output directory for executables
 set(EXECUTABLE_OUTPUT_PATH

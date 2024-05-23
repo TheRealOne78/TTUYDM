@@ -2,10 +2,15 @@
 #include <string.h>
 #include <curses.h>
 #include <vector>
+#include <spdlog/spdlog.h>
 
 UI::UI() {
     /* Start NCurses */
     initscr();
+
+    /* Hide terminal cursor */
+    if(! curs_set(0))
+        spdlog::info("This virtual terminal doesn't support cursor hiding");
 
     /* Get maximum  */
     refreshMaxResolution();
@@ -19,12 +24,26 @@ UI::UI() {
 
     entries_window    = newwin(ENTRIES_WINDOW_HEIGHT,
                                ENTRIES_WINDOW_WIDTH,
-                               ((y_max/2) - (ENTRIES_WINDOW_HEIGHT/2)),
-                               ((x_max/2) - (ENTRIES_WINDOW_HEIGHT/2)));
+                               ((y_max/2) - (ENTRIES_WINDOW_HEIGHT/2)),  /* center y */
+                               ((x_max/2) - (ENTRIES_WINDOW_HEIGHT/2))); /* center x */
 
-    help_menu_window  = newwin(
-                               ((y_max/2) - (/2)),
-                               ((x_max/2) - (/2)));
+    //TODO: Implement something more dynamic, like this
+    //help_menu_window  = newwin((int)(y_max * .7f),                    /* 70% of y_max */
+    //                           (int)(x_max * .7f),                    /* 70% of x_max */
+    //                           ((y_max/2) - (int)(y_max * .7f / 2)),  /* center y */
+    //                           ((x_max/2) - (int)(x_max * .7f / 2))); /* center x */
+
+    help_menu_window  = newwin((int)(22),
+                               (int)(60),
+                               ((y_max/2) - (int)(22 / 2)),  /* center y */
+                               ((x_max/2) - (int)(60 / 2))); /* center x */
+
+    /*
+     * Write help into memory immediatelly after the creation of
+     * help_menu_window
+     */
+    this->initHelpStr();
+    this->drawHelp();
 }
 
 UI::~UI() {
@@ -38,35 +57,66 @@ UI::~UI() {
     endwin();
 }
 
+
+/**
+ * @brief Initiate text in the this->help_str STL vector
+ *
+ * @return None.
+ */
 void UI::initHelpStr() {
-    help_str->push_back((char*)"[KEYS]");
-    help_str->push_back((char*)"ESC - Return to login screen");
-    help_str->push_back((char*)"Arrow keys - Move between input entries");
-    help_str->push_back((char*)"F1 - See this HELP menu");
-    help_str->push_back((char*)"F12 - Reset all input entries");
-    help_str->push_back((char*)"DEL - Reset selected input (also opposite to Ctrl+G)");
-    help_str->push_back((char*)"Ctrl+G - Show last item");
-    help_str->push_back((char*)"Ctrl+L - Login");
-    help_str->push_back((char*)"\n");
+    /* Create and assign a new dynamic STL vector */
+    this->help_str = new std::vector<std::string>();
 
-    help_str->push_back((char*)"[BUTTONS]");
-    help_str->push_back((char*)"Reset - Reset all input entries (same as F12)");
-    help_str->push_back((char*)"Login - Login (Same as Ctrl+L)");
-    help_str->push_back((char*)"\n");
+    /* Write help strings in the help_str vector */
+    this->help_str->push_back("[ KEYS ]");
+    this->help_str->push_back("<ESC> - Return to login screen");
+    this->help_str->push_back("Arrow keys - Move between input entries");
+    this->help_str->push_back("<F1> - See this HELP menu");
+    this->help_str->push_back("<F12> - Reset all input entries");
+    this->help_str->push_back("<DEL> - Reset selected input (also opposite to Ctrl+G)");
+    this->help_str->push_back("<Ctrl+G> - Show last item");
+    this->help_str->push_back("<Ctrl+L> - Login");
 
-    help_str->push_back((char*)"[ENTRIES]");
-    help_str->push_back((char*)"USERNAME - Username credential");
-    help_str->push_back((char*)"PASSWORD - Password credential");
-    help_str->push_back((char*)"SESSION - The session to load after signing in");
+    this->help_str->push_back("\n[ BUTTONS ]");
+    this->help_str->push_back("Reset - Reset all input entries (same as F12)");
+    this->help_str->push_back("Login - Login (Same as Ctrl+L)");
 
+    this->help_str->push_back("\n[ ENTRIES ]");
+    this->help_str->push_back("USERNAME - Username credential");
+    this->help_str->push_back("PASSWORD - Password credential");
+    this->help_str->push_back("SESSION - The session to load after signing in");
 }
 
+
+/**
+ * @brief Write all strings from this->help_str in the help window buffer
+ *
+ * Write all the strings from the this->help_str STL vector in the help window
+ * buffer.
+ *
+ * @return None.
+ */
 void UI::drawHelp() {
-    wPrintWrap(help_menu_window,
-               getcury(help_menu_window) + 1,
-               2,
-               getmaxx(help_menu_window),
-               str);
+    /* Print teh box borders */
+    box(this->help_menu_window,
+        0, 0);
+
+    /* Print Help title */
+    mvwprintw(this->help_menu_window,
+              0, 2,
+              "Help");
+
+    /* Start position */
+    wmove(this->help_menu_window, 1, 2);
+
+    /* Print every line from the this->wPrintWrap vector */
+    for (const std::string& str : *this->help_str) {
+        this->wPrintWrap(this->help_menu_window,
+                         getcury(help_menu_window) + 1,
+                         2,
+                         getmaxx(help_menu_window),
+                         str.c_str());
+    }
 }
 
 /* Bars */
@@ -88,6 +138,14 @@ void UI::drawPasswordFailedAttempts(WINDOW* win) {
 
 }
 
+
+/**
+ * @brief Draw the PAM attempts until PAM user cooldown.
+ *
+ * @param window The window in which to print the Password Cooldown time
+ *
+ * @return None.
+ */
 void UI::drawPasswordAttemptsUntilCooldown(WINDOW* win) {
 
 }
@@ -118,7 +176,7 @@ void UI::drawPasswordCooldown(WINDOW* win) {
  * @return None.
  */
 void UI::refreshMaxResolution() {
-    getmaxyx(stdscr, x_max, y_max);
+    getmaxyx(stdscr, y_max, x_max);
 }
 
 
@@ -137,10 +195,10 @@ void UI::refreshMaxResolution() {
  *
  * @return None.
  */
-void wPrintWrap(WINDOW *win,
-                const int START_Y,
-                const int START_X,
-                const int WIDTH,
+void UI::wPrintWrap(WINDOW *win,
+                const uint8_t START_Y,
+                const uint8_t START_X,
+                const uint8_t WIDTH,
                 const char* STR)
 {
     int current_x = START_X;
@@ -162,8 +220,4 @@ void wPrintWrap(WINDOW *win,
             current_x++;
         }
     }
-
-    /* Render */
-    refresh();
-    wrefresh(win);
 }

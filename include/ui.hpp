@@ -2,6 +2,7 @@
 #define __UI_HPP__
 
 #include <curses.h>
+#include <string>
 #include <vector>
 #include "user.hpp"
 
@@ -35,7 +36,7 @@ class UI : public User {
 
         void refreshMaxResolution();
 
-        void wPrintWrap(WINDOW*, const int, const int, const int, const char*);
+        void wPrintWrap(WINDOW*, const uint8_t, const uint8_t, const uint8_t, const char*);
         // <|
 
         /* == DATA == */
@@ -55,7 +56,7 @@ class UI : public User {
         WINDOW *help_menu_window;
         // <|
 
-        std::vector<char*>* help_str;
+        std::vector<std::string>* help_str;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT
