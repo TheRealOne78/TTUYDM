@@ -16,7 +16,12 @@
  */
 
 #include "ttuydm.hpp"
+#include "arghandleopts.h"
 
-int main(void) {
+int main(int argc, char* argv[]) {
+    /* Handle arguments */
+    argHandleOpts(&argc, argv);
+
+    /* Initiate TTUYDM */
     Ttuydm ttuydm;
 }

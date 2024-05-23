@@ -15,20 +15,34 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TTUYDM_HPP__
-#define __TTUYDM_HPP__
+#ifndef PROJECT_NAME
+  #define PROJECT_NAME "ttuydm"
+#endif
 
-class Ttuydm {
-    public:
-        /* Constructors */
-        Ttuydm();
+#ifndef PROJECT_NAME_LONG
+  #define PROJECT_NAME_LONG "TeleTYpewriter + Text-based User Interface Display Manager"
+#endif
 
-        /* Deconstructor */
-        ~Ttuydm();
+#ifndef AUTHOR_NAME
+  #define AUTHOR_NAME "TheRealOne78"
+#endif
 
-    private:
+#ifndef AUTHOR_EMAIL
+  #define AUTHOR_EMAIL "bajcsielias78@gmail.com"
+#endif
 
-    
-};
+#ifndef __VERSION_STR
+  #define __VERSION_STR "0.0.1-alpha"
+#endif
 
-#endif // __TTUYDM_HPP__
+#ifndef GIT_HASH_SHORT
+  #define GIT_HASH_SHORT "N/A"
+#endif
+
+#ifndef GIT_HASH_LONG
+  #define GIT_HASH_LONG "N/A"
+#endif
+
+#ifndef SRC_URI
+  #define SRC_URI "https://github.com/TheRealOne78/TTUYDM.git"
+#endif

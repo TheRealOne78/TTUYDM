@@ -15,20 +15,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TTUYDM_HPP__
-#define __TTUYDM_HPP__
+#ifndef __ARGHANDLEOPTS_H__
+#define __ARGHANDLEOPTS_H__
 
-class Ttuydm {
-    public:
-        /* Constructors */
-        Ttuydm();
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-        /* Deconstructor */
-        ~Ttuydm();
+    void argHandleOpts(int*, char*[]);
 
-    private:
+#ifdef __cplusplus
+}
+#endif // extern "C" closing bracket
 
-    
-};
-
-#endif // __TTUYDM_HPP__
+#endif // __ARGHANDLEOPTS_H__

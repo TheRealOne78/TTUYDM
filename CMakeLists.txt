@@ -18,6 +18,11 @@ set(CMAKE_CXX_STANDARD 11)
 # Set project version
 set(PROJECT_VERSION "0.0.1-alpha")
 
+# Add git hash
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+include(AddGitHash)
+add_git_hash()
+
 # Set default build type
 set(default_build_type "Release")
 
@@ -58,7 +63,7 @@ find_package(XCB REQUIRED)
 #---------------#
 
 # Manage version
-add_compile_definitions(VERSION_STR="${PROJECT_VERSION}")
+add_compile_definitions(__VERSION_STR="${PROJECT_VERSION}")
 
 # Add source subdir
 add_subdirectory(src)

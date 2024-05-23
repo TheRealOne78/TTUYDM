@@ -9,6 +9,8 @@ set("${PROJECT_NAME}_SRC"
   ttuydm.cpp
   ui.cpp
   user.cpp
+  arghandleopts.c
+  version-help.c
 )
 
 add_executable(${PROJECT_NAME}

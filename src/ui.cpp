@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2024 TheRealOne78 <bajcsielias78@gmail.com>
+ *
+ * This file is part of the TTUYDM project
+ *
+ * TTUYDM is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * TTUYDM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with TTUYDM. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
 #include "ui.hpp"
 #include <string.h>
 #include <curses.h>
@@ -35,7 +52,7 @@ UI::UI() {
 
     help_menu_window  = newwin((int)(22),
                                (int)(60),
-                               ((y_max/2) - (int)(22 / 2)),  /* center y */
+                              ((y_max/2) - (int)(22 / 2)),  /* center y */
                                ((x_max/2) - (int)(60 / 2))); /* center x */
 
     /*
@@ -122,20 +139,24 @@ void UI::drawHelp() {
 /* Bars */
 void UI::drawHeaderBar() {
 
+    //TODO
 }
 
 void UI::drawFooterBar() {
 
+    //TODO
 }
 
 /* Windows */
 
 void UI::drawTime(WINDOW* win) {
 
+    //TODO
 }
 
 void UI::drawPasswordFailedAttempts(WINDOW* win) {
 
+    //TODO
 }
 
 
@@ -148,6 +169,7 @@ void UI::drawPasswordFailedAttempts(WINDOW* win) {
  */
 void UI::drawPasswordAttemptsUntilCooldown(WINDOW* win) {
 
+    //TODO
 }
 
 /**
@@ -162,6 +184,7 @@ void UI::drawPasswordAttemptsUntilCooldown(WINDOW* win) {
  */
 void UI::drawPasswordCooldown(WINDOW* win) {
 
+    //TODO
 }
 
 /**

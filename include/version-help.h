@@ -15,20 +15,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TTUYDM_HPP__
-#define __TTUYDM_HPP__
+#ifndef __VERSION_HELP_H__
+#define __VERSION_HELP_H__
 
-class Ttuydm {
-    public:
-        /* Constructors */
-        Ttuydm();
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-        /* Deconstructor */
-        ~Ttuydm();
+    void printHelp();
+    void printVersion();
 
-    private:
+#ifdef __cplusplus
+}
+#endif // extern "C" closing bracket
 
-    
-};
-
-#endif // __TTUYDM_HPP__
+#endif // __VERSION_HELP_H__
