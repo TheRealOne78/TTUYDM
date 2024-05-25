@@ -1,4 +1,5 @@
 #include "users.hpp"
+#include <stdexcept>
 #include <string.h>
 #include <vector>
 
@@ -30,7 +31,7 @@ void Users::addUsersAuto() {
 
             users->push_back(*tmp_user);
 
-            delete tmp_user;
+            //delete tmp_user;
         }
     }
 
@@ -49,17 +50,17 @@ void Users::addUserManuallyByName(const char NAME[LOGIN_NAME_MAX]) {
     while ((tmp_passwd = getpwent()) != nullptr) {
         if (strcmp(tmp_passwd->pw_name, NAME) == 0) {
             if(! isNormalUser(tmp_passwd))
-                throw "specified user is not normal";
+                throw std::runtime_error("specified user is not normal");
 
-            User *tmp_user = new User;
+            User tmp_user;
 
-            tmp_user->setName(tmp_passwd->pw_name);
-            tmp_user->setUID(tmp_passwd->pw_uid);
-            tmp_user->setHomePath(tmp_passwd->pw_dir);
+            tmp_user.setName(tmp_passwd->pw_name);
+            tmp_user.setUID(tmp_passwd->pw_uid);
+            tmp_user.setHomePath(tmp_passwd->pw_dir);
 
-            users->push_back(*tmp_user);
+            users->push_back(tmp_user);
 
-            delete tmp_user;
+            //delete tmp_user;
 
             hasAdded = true;
 
@@ -71,7 +72,7 @@ void Users::addUserManuallyByName(const char NAME[LOGIN_NAME_MAX]) {
     endpwent();
 
     if(!hasAdded)
-        throw "specified user cannot be found";
+        throw std::runtime_error("specified user cannot be found");
 }
 
 /* Getters */
@@ -81,7 +82,7 @@ User Users::getUserByUID(const uid_t UID) {
             return user;
     }
 
-    throw "User does not exist";
+    throw std::runtime_error("User does not exist");
 }
 
 
@@ -91,7 +92,7 @@ User Users::getUserByName(const char NAME[LOGIN_NAME_MAX]) {
             return user;
     }
 
-    throw "User does not exist";
+    throw std::runtime_error("User does not exist");
 }
 
 /**

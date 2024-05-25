@@ -17,11 +17,15 @@
 
 #include "user.hpp"
 #include <cstring>
+#include <pwd.h>
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
+#include <spdlog/logger.h>
 #include <spdlog/spdlog.h>
 
-User::User() { }
+User::User() {
+    this->passwd = new std::string;
+}
 
 /* Setters */
 void User::setName(const char* name) {
@@ -35,8 +39,8 @@ void User::setUID(const uid_t uid) {
     this->uid = uid;
 }
 
-void User::setPasswd(const std::string passwd) {
-    this->passwd = std::move(passwd);
+void User::setPasswd(const std::string& passwd) {
+    *this->passwd = passwd;
 }
 
 void User::setHomePath(const char* home_path) {
@@ -56,7 +60,7 @@ const uid_t User::getUID() const {
 }
 
 const std::string& User::getPasswd() const {
-    return this->passwd;
+    return *this->passwd;
 }
 
 const char* User::getHomePath() const {
@@ -118,8 +122,8 @@ bool User::checkLogin() {
     retval = pam_authenticate(pamh, 0);
     if (retval != PAM_SUCCESS) {
         spdlog::error("pam_authenticate failed: {}", pam_strerror(pamh, retval));
-        //spdlog::error("{}", this->getPasswd());
         //BUG: this->getPasswd() and this->passwd are always empty, even tho the setter is OK
+        //TODO: As a workaround, I've used a dynamic std::string, but it may not be the best option
         pam_end(pamh, retval);
 
         return false;

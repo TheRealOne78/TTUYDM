@@ -37,7 +37,7 @@ class User {
         /* Setters */
         void setName(const char*);
         void setUID(const uid_t);
-        void setPasswd(const std::string);
+        void setPasswd(const std::string&);
         void setHomePath(const char*);
 
         /* Getters */
@@ -58,7 +58,7 @@ class User {
     private:
         char name[LOGIN_NAME_MAX + 1]; /* +1 for NULL terminator */
         uint64_t uid;
-        std::string passwd;
+        std::string* passwd;
         char home_path[PATH_MAX + 1];  /* +1 for NULL terminator */
 };
 
