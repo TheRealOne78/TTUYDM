@@ -18,7 +18,11 @@
 #ifndef __USER_HPP__
 #define __USER_HPP__
 
+#include <cstdint>
 #include <climits>
+#include <linux/limits.h>
+#include <string>
+#include <pwd.h>
 
 /**
  * @brief Store and process user credentials.
@@ -34,12 +38,16 @@ class User {
         ~User();
 
         /* Setters */
-        void set_passwd();
+        void setName(const char*);
+        void setUID(const uint64_t);
+        void setPasswd(const std::string&);
+        void setHomePath(const char*);
 
         /* Getters */
-        char* get_name();
-        char* get_passwd();
-        char* get_home_path();
+        const char* getName() const;
+        const uint64_t getUID() const;
+        const std::string& getPasswd() const;
+        const char* getHomePath() const;
 
         /* == Other methods == */
 
@@ -48,48 +56,13 @@ class User {
          *
          * @return True if correct, otherwise incorrect.
          */
-        bool check_username();
-
-        /**
-         * @brief Check if the username is correct.
-         *
-         * @return True if correct, otherwise incorrect.
-         */
-        bool check_login();
+        bool checkLogin();
 
     private:
-        char name[LOGIN_NAME_MAX];
-        char* passwd;
-
-        /* For check_user_normal() */
-        bool has_home;
-        bool has_normal_UID;
-        bool has_normal;
-
-        /**
-         * @brief Check if the user is normal.
-         *
-         * Check if the user is a normal user. This involves looking at
-         * `/etc/passwd' and see if the user has a home path and it's User ID
-         * (UID) is greater or equal to 1000.
-         *
-         * NOTE:TODO: This approach might not work for all valid users, and
-         * there might be a better approach.
-         *
-         * @return True if correct, otherwise incorrect.
-         */
-        bool check_user_normal();
-
-        /**
-         * @brief Check if the password is correct.
-         *
-         * Check if the password is correct with Pluggable Authentication
-         * Modules (PAM).
-         *
-         * @return True if correct, otherwise incorrect.
-         */
-        bool check_password();
-
+        char name[LOGIN_NAME_MAX + 1];
+        uint64_t uid;
+        std::string passwd;
+        char home_path[PATH_MAX + 1];
 };
 
 #endif // __USER_HPP__

@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-    void argHandleOpts(int*, char*[]);
+    void argHandleOpts(int* restrict, char*[]);
 
 #ifdef __cplusplus
 }

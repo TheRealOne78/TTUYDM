@@ -5,11 +5,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 # Set main executable source files
 set("${PROJECT_NAME}_SRC"
   main.cpp
+  arghandleopts.c
   signal-handlers.c
   ttuydm.cpp
   ui.cpp
   user.cpp
-  arghandleopts.c
+  users.cpp
   version-help.c
 )
 

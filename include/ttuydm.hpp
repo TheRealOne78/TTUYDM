@@ -18,6 +18,9 @@
 #ifndef __TTUYDM_HPP__
 #define __TTUYDM_HPP__
 
+#include "ui.hpp"
+#include "user.hpp"
+
 class Ttuydm {
     public:
         /* Constructors */
@@ -27,8 +30,8 @@ class Ttuydm {
         ~Ttuydm();
 
     private:
-
-    
+        UI ui;
+        std::vector<User> users;
 };
 
 #endif // __TTUYDM_HPP__
