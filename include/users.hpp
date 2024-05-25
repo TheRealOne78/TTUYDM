@@ -6,7 +6,6 @@
  */
 #include "user.hpp"
 #include <climits>
-#include <cstdint>
 #include <vector>
 #include <pwd.h>
 
@@ -19,13 +18,14 @@ class Users {
         ~Users();
 
         /* Setters */
-        void addUserManuallyByName(const char* [LOGIN_NAME_MAX]);
+        void addUserManuallyByName(const char [LOGIN_NAME_MAX]);
 
         /* Getters */
-        User getUserByUID(const uint64_t);
-        User getUserByName(const char* [LOGIN_NAME_MAX]);
+        User getUserByUID(const uid_t);
+        User getUserByName(const char [LOGIN_NAME_MAX]);
 
         /* == Other methods == */
+        void addUsersAuto();
 
     private:
         bool isNormalUser(const struct passwd*);

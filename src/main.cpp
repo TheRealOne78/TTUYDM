@@ -22,6 +22,6 @@ int main(int argc, char* argv[]) {
     /* Handle arguments */
     argHandleOpts(&argc, argv);
 
-    /* Start daemon */
+    /* Initiate TTUYDM */
     Ttuydm ttuydm;
 }

@@ -34,18 +34,15 @@ class User {
         /* Constructors */
         User();
 
-        /* Deconstructors */
-        ~User();
-
         /* Setters */
         void setName(const char*);
-        void setUID(const uint64_t);
-        void setPasswd(const std::string&);
+        void setUID(const uid_t);
+        void setPasswd(const std::string);
         void setHomePath(const char*);
 
         /* Getters */
         const char* getName() const;
-        const uint64_t getUID() const;
+        const uid_t getUID() const;
         const std::string& getPasswd() const;
         const char* getHomePath() const;
 
@@ -59,10 +56,10 @@ class User {
         bool checkLogin();
 
     private:
-        char name[LOGIN_NAME_MAX + 1];
+        char name[LOGIN_NAME_MAX + 1]; /* +1 for NULL terminator */
         uint64_t uid;
         std::string passwd;
-        char home_path[PATH_MAX + 1];
+        char home_path[PATH_MAX + 1];  /* +1 for NULL terminator */
 };
 
 #endif // __USER_HPP__

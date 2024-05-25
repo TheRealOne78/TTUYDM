@@ -33,12 +33,12 @@
  *
  * @return None.
  */
-void argHandleOpts(int* restrict argc, char* argv[]) {
+void argHandleOpts(int* argc, char* argv[]) {
 
     static struct option long_options [] = {
-    { "help"   , no_argument, NULL, 'h' },
-    { "version", no_argument, NULL, 'v' },
-    { NULL     , 0          , NULL, 0   }};
+    { "help"                , no_argument      , NULL , 'h' },
+    { "version"             , no_argument      , NULL , 'v' },
+    { NULL                  , 0                , NULL , 0   }};
 
     /* And check for arguments */
     while(1) {

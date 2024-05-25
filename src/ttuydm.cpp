@@ -16,9 +16,11 @@
  */
 
 #include "ttuydm.hpp"
+#include "ui.hpp"
 
 Ttuydm::Ttuydm() {
     //TODO
+    UI ui;
 }
 
 Ttuydm::~Ttuydm() {

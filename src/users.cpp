@@ -13,7 +13,7 @@ Users::~Users() {
     delete this->users;
 }
 
-void Users::addUserManuallyByName(const char* [LOGIN_NAME_MAX]) {
+void Users::addUsersAuto() {
 
     /* Rewind the passwd db */
     setpwent();
@@ -26,6 +26,7 @@ void Users::addUserManuallyByName(const char* [LOGIN_NAME_MAX]) {
 
             tmp_user->setName(tmp_passwd->pw_name);
             tmp_user->setUID(tmp_passwd->pw_uid);
+            tmp_user->setHomePath(tmp_passwd->pw_dir);
 
             users->push_back(*tmp_user);
 
@@ -37,8 +38,44 @@ void Users::addUserManuallyByName(const char* [LOGIN_NAME_MAX]) {
     endpwent();
 }
 
+void Users::addUserManuallyByName(const char NAME[LOGIN_NAME_MAX]) {
+
+    /* Rewind the passwd db */
+    setpwent();
+
+    struct passwd* tmp_passwd;
+    bool hasAdded = false;
+
+    while ((tmp_passwd = getpwent()) != nullptr) {
+        if (strcmp(tmp_passwd->pw_name, NAME) == 0) {
+            if(! isNormalUser(tmp_passwd))
+                throw "specified user is not normal";
+
+            User *tmp_user = new User;
+
+            tmp_user->setName(tmp_passwd->pw_name);
+            tmp_user->setUID(tmp_passwd->pw_uid);
+            tmp_user->setHomePath(tmp_passwd->pw_dir);
+
+            users->push_back(*tmp_user);
+
+            delete tmp_user;
+
+            hasAdded = true;
+
+            break;
+        }
+    }
+
+    /* Close passwd db */
+    endpwent();
+
+    if(!hasAdded)
+        throw "specified user cannot be found";
+}
+
 /* Getters */
-User Users::getUserByUID(const uint64_t UID) {
+User Users::getUserByUID(const uid_t UID) {
     for(User user : *this->users) {
         if(user.getUID() == UID)
             return user;
@@ -47,9 +84,10 @@ User Users::getUserByUID(const uint64_t UID) {
     throw "User does not exist";
 }
 
-User Users::getUserByName(const char* NAME[LOGIN_NAME_MAX]) {
+
+User Users::getUserByName(const char NAME[LOGIN_NAME_MAX]) {
     for(User user : *this->users) {
-        if(strcmp(user.getName(), *NAME))
+        if(strcmp(user.getName(), NAME) == 0)
             return user;
     }
 

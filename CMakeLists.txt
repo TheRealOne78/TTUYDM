@@ -14,6 +14,7 @@ project(ttuydm
 ### * std::future
 ### * std::async
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 
 # Set project version
 set(PROJECT_VERSION "0.0.1-alpha")
@@ -79,7 +80,8 @@ add_subdirectory(src)
 
 #### TESTING ####
 #---------------#
-
+enable_testing()
+add_subdirectory(tests)
 
 #### PACKAGE ####
 #---------------#

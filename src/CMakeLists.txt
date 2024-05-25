@@ -1,16 +1,15 @@
 # Set the output directory for libraries
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
-  ${CMAKE_BINARY_DIR}/libs)
+  "${CMAKE_BINARY_DIR}/libs")
 
 # Set main executable source files
 set("${PROJECT_NAME}_SRC"
   main.cpp
-  arghandleopts.c
   signal-handlers.c
   ttuydm.cpp
   ui.cpp
   user.cpp
-  users.cpp
+  arghandleopts.c
   version-help.c
 )
 
@@ -21,8 +20,9 @@ target_include_directories("${PROJECT_NAME}" PRIVATE
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_BINARY_DIR}/include")
 
-target_link_libraries(${PROJECT_NAME}
-  ${CURSES_LIBRARIES}
+target_link_libraries("${PROJECT_NAME}"
+  "${CURSES_LIBRARIES}"
+  "${PAM_LIBRARIES}"
   spdlog::spdlog)
 
 # Set the output directory for executables
