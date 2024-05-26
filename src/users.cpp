@@ -5,6 +5,9 @@
 
 Users::Users(void) {
     this->users = new std::vector<User>;
+
+    /* Initiate all users */
+    this->addUsersAuto();
 }
 
 Users::~Users(void) {
@@ -64,6 +67,16 @@ User Users::getUserByName(const char NAME[LOGIN_NAME_MAX]) {
     }
 
     throw std::runtime_error("This user does not exist");
+}
+
+
+std::vector<std::string> Users::getAllUsernames() {
+    std::vector<std::string> tmp;
+
+    for(User user : *this->users)
+        tmp.push_back(std::string(user.getName()));
+
+    return tmp;
 }
 
 /* Other methods */

@@ -28,6 +28,9 @@ class Users {
         /// Get a User by passing it's username
         User getUserByName(const char [LOGIN_NAME_MAX]);
 
+        /// Get all usernames by a vector of type std::string
+        std::vector<std::string> getAllUsernames();
+
         /* == Other methods == */
         /**
          * @brief Automatically add all normal users.

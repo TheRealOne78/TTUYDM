@@ -22,13 +22,18 @@
 #include <string>
 #include <vector>
 
+#include "ui-userentry.hpp"
+#include "ui-passwordentry.hpp"
+#include "ui-sessionentry.hpp"
+
 /**
  * @brief Handle everything related to the TUI
  */
 class UI {
     public:
         /* == CONSTRUCTORS == */
-        UI();
+        UI(std::vector<std::string>* users,
+           std::vector<std::string>* sessions);
 
         /* == DECONSTRUCTORS == */
         ~UI();
@@ -128,7 +133,7 @@ class UI {
         /* == DATA == */
         int x_max, y_max;
 
-        char* entered_password;
+        char*    entered_password;
         uint64_t entered_password_length;
 
         // |> WINDOWS
@@ -143,6 +148,13 @@ class UI {
         // <|
 
         std::vector<std::string>* help_str;
+
+        UserEntry     *user_entry;
+        PasswordEntry *passwd_entry;
+        SessionEntry  *session_entry;
+
+        std::vector<std::string>* users;
+        std::vector<std::string>* sessions;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT

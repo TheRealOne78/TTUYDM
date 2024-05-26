@@ -11,6 +11,9 @@ set("${PROJECT_NAME}_SRC"
   user.cpp
   arghandleopts.c
   version-help.c
+  ui-passwordentry.cpp
+  ui-userentry.cpp
+  ui-sessionentry.cpp
 )
 
 add_executable(${PROJECT_NAME}

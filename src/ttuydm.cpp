@@ -17,9 +17,13 @@
 
 #include "ttuydm.hpp"
 #include "ui.hpp"
+#include "users.hpp"
+#include <vector>
 
 Ttuydm::Ttuydm(void) {
     //TODO
+    Users users;
+
     UI ui;
 }
 

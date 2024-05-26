@@ -16,6 +16,7 @@
  */
 
 #include "ui.hpp"
+#include "ui-passwordentry.hpp"
 #include <string.h>
 #include <curses.h>
 #include <vector>
@@ -52,7 +53,7 @@ UI::UI(void) {
 
     help_menu_window  = newwin((int)(22),
                                (int)(60),
-                              ((y_max/2) - (int)(22 / 2)),  /* center y */
+                               ((y_max/2) - (int)(22 / 2)),  /* center y */
                                ((x_max/2) - (int)(60 / 2))); /* center x */
 
     /*
@@ -61,6 +62,14 @@ UI::UI(void) {
      */
     this->initHelpStr();
     this->drawHelp();
+
+    /* Init users and sessions vectors */
+    users    = new std::vector<std::string>;
+    sessions = new std::vector<std::string>;
+
+    user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, *users);
+    passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
+    session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, *sessions);
 }
 
 UI::~UI(void) {

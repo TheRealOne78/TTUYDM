@@ -53,10 +53,6 @@ class Ttuydm {
 
         /* Deconstructor */
         ~Ttuydm();
-
-    private:
-
-    
 };
 
 #endif // __TTUYDM_HPP__
