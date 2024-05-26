@@ -21,17 +21,62 @@ PKG_MGR=""          # The package manager that will install the dependencies
 WILL_INSTALL=false  # Check if anything will be installed, else skip
 
 # List of dependencies
-# Common Linux: gcc make cmake spdlog ncurses
-# Debian:
-# BSD:
+# Common Linux: gcc make cmake spdlog ncurses doxygen
+# Debian: gcc make cmake spdlog libncurses-dev doxygen
+# RPM-based (Fedora, CentOS): gcc make cmake spdlog ncurses-devel doxygen
+# BSD: gcc make cmake spdlog ncurses doxygen
 
-# Checking existing dependencies
 if [ ! -x "$(command -v gcc)" ]; then
   printf "$INFO ${GREEN}gcc${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
   DEPENDENCIES="$DEPENDENCIES gcc"
   DEB_DEPENDENCIES="$DEB_DEPENDENCIES gcc"
   RPM_DEPENDENCIES="$RPM_DEPENDENCIES gcc"
   BSD_DEPENDENCIES="$BSD_DEPENDENCIES gcc"
+  WILL_INSTALL=true
+fi
+
+if [ ! -x "$(command -v make)" ]; then
+  printf "$INFO ${GREEN}make${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES make"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES make"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES make"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES make"
+  WILL_INSTALL=true
+fi
+
+if [ ! -x "$(command -v cmake)" ]; then
+  printf "$INFO ${GREEN}cmake${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES cmake"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES cmake"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES cmake"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES cmake"
+  WILL_INSTALL=true
+fi
+
+if [ ! -f "/usr/include/spdlog/spdlog.h" ]; then
+  printf "$INFO ${GREEN}spdlog${ENDCOLOR} header files not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES spdlog"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES libspdlog-dev"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES spdlog-devel"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES spdlog"
+  WILL_INSTALL=true
+fi
+
+if [ ! -f "/usr/include/ncurses.h" ]; then
+  printf "$INFO ${GREEN}ncurses${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES ncurses"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES libncurses-dev"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES ncurses-devel"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES ncurses"
+  WILL_INSTALL=true
+fi
+
+if [ ! -x "$(command -v doxygen)" ]; then
+  printf "$INFO ${GREEN}doxygen${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES doxygen"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES doxygen"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES doxygen"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES doxygen"
   WILL_INSTALL=true
 fi
 
@@ -54,9 +99,9 @@ if [ "$WILL_INSTALL" = "true" ]; then
     PKG_MGR="dnf"
 
   ### CentOS
-  #elif [ -x "$(command -v yum)" ]; then
-  #  printf "$INFO yum package manager detected\n"
-  #  PKG_MGR="yum"
+  elif [ -x "$(command -v yum)" ]; then
+    printf "$INFO yum package manager detected\n"
+    PKG_MGR="yum"
 
   ### Gentoo
   elif [ -x "$(command -v emerge)" ]; then
@@ -115,7 +160,7 @@ $ERR For more info, see https://wiki.gentoo.org/wiki/Emerge and https://wiki.gen
   if [ $? -eq 0 ]; then
     printf "$INFO Packages installed successfully\n"
   else
-    printf "$ERR Error: $PKG_MGR returned with exit code $?, aborting!\n"
+    printf "$ERR Error: $PKG_MGR returned with exit code ${?}, aborting!\n"
     exit 1
   fi
 
