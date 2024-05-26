@@ -22,7 +22,9 @@
 #include <vector>
 #include <spdlog/spdlog.h>
 
-UI::UI(void) {
+UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
+    : users(users), sessions(sessions) {
+
     /* Start NCurses */
     initscr();
 
@@ -63,13 +65,10 @@ UI::UI(void) {
     this->initHelpStr();
     this->drawHelp();
 
-    /* Init users and sessions vectors */
-    users    = new std::vector<std::string>;
-    sessions = new std::vector<std::string>;
-
-    user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, *users);
+    /* Init entries */
+    user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, users);
     passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
-    session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, *sessions);
+    session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
 }
 
 UI::~UI(void) {
@@ -78,6 +77,11 @@ UI::~UI(void) {
     delwin(bottom_bar_window);
     delwin(entries_window);
     delwin(help_menu_window);
+
+    /* delete entries */
+    delete user_entry;
+    delete passwd_entry;
+    delete session_entry;
 
     /* End NCurses completely */
     endwin();
@@ -137,17 +141,22 @@ void UI::drawHelp(void) {
 
 /* Bars */
 void UI::drawHeaderBar(void) {
+    this->drawTime();
 
+    /* Draw horizontal line */
+    mvwprintw(bottom_bar_window, 1, 0, "%s", std::string(this->x_max, '_').c_str());
+
+    wrefresh(top_bar_window);
     //TODO
 }
 
 void UI::drawFooterBar(void) {
-
-    //TODO
+    mvwprintw(bottom_bar_window, 0, 0, "F1 - Help");
+    wrefresh(bottom_bar_window);
 }
 
 /* Windows */
-void UI::drawTime(WINDOW* win) {
+void UI::drawTime() {
 
     //TODO
 }

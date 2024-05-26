@@ -7,7 +7,7 @@ SessionEntry::SessionEntry(WINDOW* win,
                            const std::vector<std::string>& sessions)
   : win(win), y(y), x(x), max_length(max_length), sessions(sessions), selectedIndex(0) {}
 
-void SessionEntry::handleInput() {
+int SessionEntry::handleInput() {
   int ch;
   while ((ch = wgetch(win)) != '\n') {
     switch (ch) {

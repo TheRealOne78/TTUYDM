@@ -32,8 +32,7 @@
 class UI {
     public:
         /* == CONSTRUCTORS == */
-        UI(std::vector<std::string>* users,
-           std::vector<std::string>* sessions);
+        UI(std::vector<std::string> users, std::vector<std::string> sessions);
 
         /* == DECONSTRUCTORS == */
         ~UI();
@@ -64,7 +63,7 @@ class UI {
         /* Windows */
         void drawWinEntryCredentials();
         /* Requires */
-        void drawTime(WINDOW* win);
+        void drawTime();
         // |> requires user.hpp
         void drawPasswordFailedAttempts(WINDOW* win);
 
@@ -153,8 +152,8 @@ class UI {
         PasswordEntry *passwd_entry;
         SessionEntry  *session_entry;
 
-        std::vector<std::string>* users;
-        std::vector<std::string>* sessions;
+        std::vector<std::string> users;
+        std::vector<std::string> sessions;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT

@@ -3,7 +3,7 @@
 UserEntry::UserEntry(WINDOW* win, uint16_t y, uint16_t x, uint16_t maxLength, const std::vector<std::string>& users)
     : win(win), y(y), x(x), maxLength(maxLength), users(users), selectedIndex(0), active(false) {}
 
-void UserEntry::handleInput() {
+int UserEntry::handleInput() {
     int ch;
     while ((ch = wgetch(win)) != '\n') {
         if (active) {

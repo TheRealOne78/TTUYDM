@@ -18,13 +18,15 @@
 #include "ttuydm.hpp"
 #include "ui.hpp"
 #include "users.hpp"
-#include <vector>
+#include "sessions.hpp"
 
 Ttuydm::Ttuydm(void) {
     //TODO
     Users users;
 
-    UI ui;
+    Sessions sessions;
+
+    UI ui(users.getAllUsernames(), sessions.getAllSessionNames());
 }
 
 Ttuydm::~Ttuydm(void) {

@@ -15,6 +15,6 @@ EXTRACT_ANON_NSPACES   = YES
 
 # Documentation options
 GENERATE_LATEX         = NO
-GENERATE_MAN           = YES
+GENERATE_MAN           = NO
 GENERATE_RTF           = NO
 GENERATE_XML           = NO

@@ -7,7 +7,7 @@ PasswordEntry::PasswordEntry(WINDOW* win, int x, int y, uint16_t max_length)
   : win(win), x(x), y(y), max_length(max_length) {}
 
 std::string& PasswordEntry::getPassword() {
-    return password;
+  return this->password;
 }
 
 int PasswordEntry::handleInput() {
@@ -44,8 +44,4 @@ void PasswordEntry::display() const {
     attroff(A_STANDOUT);
   }
   wrefresh(win);
-}
-
-std::string& PasswordEntry::getPassword() {
-  return this->password;
 }

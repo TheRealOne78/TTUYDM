@@ -9,11 +9,13 @@ set("${PROJECT_NAME}_SRC"
   ttuydm.cpp
   ui.cpp
   user.cpp
+  users.cpp
   arghandleopts.c
   version-help.c
   ui-passwordentry.cpp
   ui-userentry.cpp
   ui-sessionentry.cpp
+  sessions.cpp
 )
 
 add_executable(${PROJECT_NAME}
