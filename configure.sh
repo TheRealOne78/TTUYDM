@@ -21,10 +21,10 @@ PKG_MGR=""          # The package manager that will install the dependencies
 WILL_INSTALL=false  # Check if anything will be installed, else skip
 
 # List of dependencies
-# Common Linux: gcc make cmake spdlog ncurses doxygen
-# Debian: gcc make cmake spdlog libncurses-dev doxygen
-# RPM-based (Fedora, CentOS): gcc make cmake spdlog ncurses-devel doxygen
-# BSD: gcc make cmake spdlog ncurses doxygen
+# Common Linux: gcc make cmake spdlog ncurses doxygen libpam-devel
+# Debian: gcc make cmake spdlog libncurses-dev doxygen libpam-dev
+# RPM-based (Fedora, CentOS): gcc make cmake spdlog ncurses-devel doxygen pam-devel
+# BSD: gcc make cmake spdlog ncurses doxygen pam
 
 if [ ! -x "$(command -v gcc)" ]; then
   printf "$INFO ${GREEN}gcc${ENDCOLOR} not detected, adding it in the dependencies install queue\n"
@@ -77,6 +77,15 @@ if [ ! -x "$(command -v doxygen)" ]; then
   DEB_DEPENDENCIES="$DEB_DEPENDENCIES doxygen"
   RPM_DEPENDENCIES="$RPM_DEPENDENCIES doxygen"
   BSD_DEPENDENCIES="$BSD_DEPENDENCIES doxygen"
+  WILL_INSTALL=true
+fi
+
+if [ ! -f "/usr/include/security/pam_appl.h" ]; then
+  printf "$INFO ${GREEN}libpam${ENDCOLOR} header files not detected, adding it in the dependencies install queue\n"
+  DEPENDENCIES="$DEPENDENCIES libpam-devel"
+  DEB_DEPENDENCIES="$DEB_DEPENDENCIES libpam-dev"
+  RPM_DEPENDENCIES="$RPM_DEPENDENCIES pam-devel"
+  BSD_DEPENDENCIES="$BSD_DEPENDENCIES pam"
   WILL_INSTALL=true
 fi
 
