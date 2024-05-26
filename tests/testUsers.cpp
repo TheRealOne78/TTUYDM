@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <climits>
+#include <termios.h>
 
 static Users users;
 char tmp_username[100];
@@ -31,6 +32,20 @@ TEST(UserTests, CheckLogin) {
     CHECK(users.getUserByName(tmp_username).checkLogin());
 }
 
+void toggleEcho(bool enable) {
+    // Made by ChatGPT
+    struct termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    if (enable) {
+        // Enable echo
+        tty.c_lflag |= ECHO;
+    } else {
+        // Disable echo
+        tty.c_lflag &= ~ECHO;
+    }
+    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+
 int main(int argc, char* argv[]) {
     tmp_uid = getuid();
 
@@ -43,8 +58,10 @@ int main(int argc, char* argv[]) {
     strcpy(tmp_username, pw->pw_name);
 
     std::string tmp_password;
-    std::cout << "Please input login password for user '" << tmp_username << "' (one attempt only!): ";
+    std::cout << "Please input login password for user '" << tmp_username << "' (one attempt only!): " << std::flush;
+    toggleEcho(false);
     std::cin >> tmp_password;
+    toggleEcho(true);
 
     users.addUserManuallyByName(tmp_username);
     users.getUserByName(tmp_username).setPasswd(tmp_password);

@@ -18,11 +18,11 @@
 #include "ttuydm.hpp"
 #include "ui.hpp"
 
-Ttuydm::Ttuydm() {
+Ttuydm::Ttuydm(void) {
     //TODO
     UI ui;
 }
 
-Ttuydm::~Ttuydm() {
+Ttuydm::~Ttuydm(void) {
     //TODO
 }

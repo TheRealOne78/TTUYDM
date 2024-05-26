@@ -3,18 +3,72 @@
 #include <string.h>
 #include <vector>
 
-
-Users::Users() {
+Users::Users(void) {
     this->users = new std::vector<User>;
 }
 
-Users::~Users() {
+Users::~Users(void) {
     /* Destroy this->users */
     this->users->clear();
     delete this->users;
 }
 
-void Users::addUsersAuto() {
+void Users::addUserManuallyByName(const char NAME[LOGIN_NAME_MAX]) {
+
+    /* Rewind the passwd db */
+    setpwent();
+
+    struct passwd* tmp_passwd;
+    bool hasAdded = false;
+
+    while ((tmp_passwd = getpwent()) != nullptr) {
+        if (strcmp(tmp_passwd->pw_name, NAME) == 0) {
+            //if(! isNormalUser(tmp_passwd))
+            //    throw std::runtime_error("specified user is not normal");
+            //FIXME:TODO: remove this because one would add this user only if it wasn't normal?
+
+            User tmp_user;
+
+            tmp_user.setName(tmp_passwd->pw_name);
+            tmp_user.setUID(tmp_passwd->pw_uid);
+            tmp_user.setHomePath(tmp_passwd->pw_dir);
+
+            users->push_back(tmp_user);
+
+            hasAdded = true;
+
+            break;
+        }
+    }
+
+    /* Close passwd db */
+    endpwent();
+
+    if(!hasAdded)
+        throw std::runtime_error("The specified user cannot be found.");
+}
+
+/* Getters */
+User Users::getUserByUID(const uid_t UID) {
+    for(User user : *this->users) {
+        if(user.getUID() == UID)
+            return user;
+    }
+    throw std::runtime_error("This user does not exist");
+}
+
+User Users::getUserByName(const char NAME[LOGIN_NAME_MAX]) {
+    for(User user : *this->users) {
+        if(strcmp(user.getName(), NAME) == 0)
+            return user;
+    }
+
+    throw std::runtime_error("This user does not exist");
+}
+
+/* Other methods */
+
+void Users::addUsersAuto(void) {
 
     /* Rewind the passwd db */
     setpwent();
@@ -38,71 +92,6 @@ void Users::addUsersAuto() {
     /* Close passwd db */
     endpwent();
 }
-
-void Users::addUserManuallyByName(const char NAME[LOGIN_NAME_MAX]) {
-
-    /* Rewind the passwd db */
-    setpwent();
-
-    struct passwd* tmp_passwd;
-    bool hasAdded = false;
-
-    while ((tmp_passwd = getpwent()) != nullptr) {
-        if (strcmp(tmp_passwd->pw_name, NAME) == 0) {
-            if(! isNormalUser(tmp_passwd))
-                throw std::runtime_error("specified user is not normal");
-
-            User tmp_user;
-
-            tmp_user.setName(tmp_passwd->pw_name);
-            tmp_user.setUID(tmp_passwd->pw_uid);
-            tmp_user.setHomePath(tmp_passwd->pw_dir);
-
-            users->push_back(tmp_user);
-
-            //delete tmp_user;
-
-            hasAdded = true;
-
-            break;
-        }
-    }
-
-    /* Close passwd db */
-    endpwent();
-
-    if(!hasAdded)
-        throw std::runtime_error("specified user cannot be found");
-}
-
-/* Getters */
-User Users::getUserByUID(const uid_t UID) {
-    for(User user : *this->users) {
-        if(user.getUID() == UID)
-            return user;
-    }
-
-    throw std::runtime_error("User does not exist");
-}
-
-
-User Users::getUserByName(const char NAME[LOGIN_NAME_MAX]) {
-    for(User user : *this->users) {
-        if(strcmp(user.getName(), NAME) == 0)
-            return user;
-    }
-
-    throw std::runtime_error("User does not exist");
-}
-
-/**
- * @brief Check if the user is normal.
- *
- * Check if the user is a normal user. This involves checking common system-user
- * patterns and then excluding them.
- *
- * @return True if correct, otherwise incorrect.
- */
 
 bool Users::isNormalUser(const struct passwd* pwd) {
     /* Exclude users with UID below 1000 */

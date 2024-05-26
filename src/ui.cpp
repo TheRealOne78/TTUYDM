@@ -21,7 +21,7 @@
 #include <vector>
 #include <spdlog/spdlog.h>
 
-UI::UI() {
+UI::UI(void) {
     /* Start NCurses */
     initscr();
 
@@ -63,7 +63,7 @@ UI::UI() {
     this->drawHelp();
 }
 
-UI::~UI() {
+UI::~UI(void) {
     /* Delete all windows */
     delwin(top_bar_window);
     delwin(bottom_bar_window);
@@ -75,12 +75,11 @@ UI::~UI() {
 }
 
 
-/**
- * @brief Initiate text in the this->help_str STL vector
- *
- * @return None.
+/*
+ * TODO: Make the width size of the help menu proportional the size of the
+ * longest string in this vector
  */
-void UI::initHelpStr() {
+void UI::initHelpStr(void) {
     /* Create and assign a new dynamic STL vector */
     this->help_str = new std::vector<std::string>();
 
@@ -104,16 +103,7 @@ void UI::initHelpStr() {
     this->help_str->push_back("SESSION - The session to load after signing in");
 }
 
-
-/**
- * @brief Write all strings from this->help_str in the help window buffer
- *
- * Write all the strings from the this->help_str STL vector in the help window
- * buffer.
- *
- * @return None.
- */
-void UI::drawHelp() {
+void UI::drawHelp(void) {
     /* Print teh box borders */
     box(this->help_menu_window,
         0, 0);
@@ -137,18 +127,17 @@ void UI::drawHelp() {
 }
 
 /* Bars */
-void UI::drawHeaderBar() {
+void UI::drawHeaderBar(void) {
 
     //TODO
 }
 
-void UI::drawFooterBar() {
+void UI::drawFooterBar(void) {
 
     //TODO
 }
 
 /* Windows */
-
 void UI::drawTime(WINDOW* win) {
 
     //TODO
@@ -160,68 +149,24 @@ void UI::drawPasswordFailedAttempts(WINDOW* win) {
 }
 
 
-/**
- * @brief Draw the PAM attempts until PAM user cooldown.
- *
- * @param window The window in which to print the Password Cooldown time
- *
- * @return None.
- */
 void UI::drawPasswordAttemptsUntilCooldown(WINDOW* win) {
 
     //TODO
 }
 
-/**
- * @brief Draw the PAM password cooldown time in NCurses.
- *
- * Draw the PAM password cooldown time in NCurses in the specified WINDOW, at
- * the center.
- *
- * @param window The window in which to draw justify-center the Password Cooldown time
- *
- * @return None.
- */
 void UI::drawPasswordCooldown(WINDOW* win) {
 
     //TODO
 }
 
-/**
- * @brief Refresh the maximum resolution for ncurses standard screen
- *
- * Refresh the maximum resolution for ncurses standard screen.
- * This automatically updates UI::x_max and UI::y_max.
- *
- * This method is recommended to use because you don't have to type any
- * parameters.
- *
- * @return None.
- */
-void UI::refreshMaxResolution() {
+void UI::refreshMaxResolution(void) {
     getmaxyx(stdscr, y_max, x_max);
 }
 
-
-/**
- * @brief Print wrapped string in a window
- *
- * @param win The window to print in
- *
- * @param START_X The y start position
- *
- * @param START_X The x start position
- *
- * @param The total character width to use in the window. Customize with caution.
- *
- * @param STR The string to print
- *
- * @return None.
- */
 void UI::wPrintWrap(WINDOW *win,
-                const uint8_t START_Y,
-                const uint8_t START_X,
-                const uint8_t WIDTH,
+                const uint16_t START_Y,
+                const uint16_t START_X,
+                const uint16_t WIDTH,
                 const char* STR)
 {
     int current_x = START_X;

@@ -22,8 +22,11 @@
 extern "C" {
 #endif
 
-    void printHelp();
-    void printVersion();
+    /// Print help list
+    void printHelp(void);
+
+    /// Print version, git hash and copyright info
+    void printVersion(void);
 
 #ifdef __cplusplus
 }

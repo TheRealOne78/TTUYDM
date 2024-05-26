@@ -17,22 +17,6 @@
 
 #include "signal-handlers.h"
 
-/**
- * @brief Reset password buffer when program receiving ^C (SIGINT)
- *
- * Handle the INT signal on POSIX compliant operating systems by resetting the
- * password input buffer when the user presses ^C (CTRL+C).
- *
- * This makes more sense for a Diplay Manager, because it's supposed to be a
- * daemon, not command-line program.
- *
- * See https://en.wikipedia.org/wiki/Signal_(IPC)> or
- * [signal(7)](https://www.man7.org/linux/man-pages/man7/signal.7.html) manual
- * if you don't know what a signal is.
- *
- * @param signum The Signal number. This should be SIGINT.
- * @return None.
- */
 void handler_sigint(int signum) {
     IS_SIGINT_TRIGGERED = true;
 }

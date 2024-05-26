@@ -21,9 +21,11 @@
 #include <curses.h>
 #include <string>
 #include <vector>
-#include "user.hpp"
 
-class UI : public User {
+/**
+ * @brief Handle everything related to the TUI
+ */
+class UI {
     public:
         /* == CONSTRUCTORS == */
         UI();
@@ -31,31 +33,98 @@ class UI : public User {
         /* == DECONSTRUCTORS == */
         ~UI();
 
-    private:
         /* == METHODS == */
 
+        /**
+         * @brief Initiate text in the this->help_str STL vector
+         * hei
+         * @return None.
+         */
         void initHelpStr();
 
         /* = Draw = */
         /* Screens */
+
+        /**
+         * @brief Write all the strings from the this->help_str STL vector in
+         * the help window buffer.
+         *
+         * @return None.
+         */
         void drawHelp();
+
         /* Bars */
         void drawHeaderBar();
         void drawFooterBar();
         /* Windows */
         void drawWinEntryCredentials();
         /* Requires */
-        void drawTime(WINDOW*);
+        void drawTime(WINDOW* win);
         // |> requires user.hpp
-        void drawPasswordFailedAttempts(WINDOW*);
-        void drawPasswordAttemptsUntilCooldown(WINDOW*);
-        void drawPasswordCooldown(WINDOW*);
+        void drawPasswordFailedAttempts(WINDOW* win);
 
+
+        /**
+         * @brief Draw the PAM attempts until PAM user cooldown.
+         *
+         * @param win The window in which to print the Password Cooldown time
+         *
+         * @return None.
+         */
+        void drawPasswordAttemptsUntilCooldown(WINDOW* win);
+
+        /**
+         * @brief Draw the PAM password cooldown time in NCurses.
+         *
+         * Draw the PAM password cooldown time in NCurses in the specified WINDOW, at
+         * the center.
+         *
+         * @param win The window in which to draw justify-center the Password Cooldown time
+         *
+         * @return None.
+         */
+        void drawPasswordCooldown(WINDOW* win);
+
+        /**
+         * @brief Refresh the maximum resolution for ncurses standard screen
+         *
+         * Refresh the maximum resolution for ncurses standard screen.
+         * This automatically updates UI::x_max and UI::y_max.
+         *
+         * This method is recommended to use because you don't have to type any
+         * parameters.
+         *
+         * @return None.
+         */
         void refreshMaxResolution();
 
-        void wPrintWrap(WINDOW*, const uint8_t, const uint8_t, const uint8_t, const char*);
+
+        /**
+         * @brief Prints a string with wrapping in a window.
+         *
+         * This function prints the given string in the specified window, wrapping
+         * the text to fit within the specified width.
+         *
+         * @note If the string contains newline characters ('\\n'), they are respected as
+         * line breaks, unless the string contains only the newline character.
+         *
+         * @param win     The window to print in.
+         * @param START_Y The y-coordinate of the starting position.
+         * @param START_X The x-coordinate of the starting position.
+         * @param WIDTH   The total width, in characters, to use in the window. Text
+         *                will wrap to fit within this width.
+         * @param STR     The string to print.
+         *
+         * @return None.
+         */
+        void wPrintWrap(WINDOW* win,
+                        const uint16_t START_Y,
+                        const uint16_t START_X,
+                        const uint16_t WIDTH,
+                        const char* STR);
         // <|
 
+    private:
         /* == DATA == */
         int x_max, y_max;
 

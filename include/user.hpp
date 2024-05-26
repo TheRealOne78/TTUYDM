@@ -25,35 +25,53 @@
 #include <pwd.h>
 
 /**
- * @brief Store and process user credentials.
+ * @brief Store, get and process POSIX user's information.
  *
- * This class stores, processes
+ * Store, get and process a POSIX user's information regarding their username,
+ * user ID, the provided password and their home path.
  */
 class User {
     public:
-        /* Constructors */
+        /* == Constructors == */
         User();
 
-        /* Setters */
+        /* == Setters == */
+        /// Setter for the user's name
         void setName(const char*);
+
+        /// Setter for the user's ID
         void setUID(const uid_t);
+
+        /// Setter for setting the password
         void setPasswd(const std::string&);
+
+        /// Setter for the user's home path
         void setHomePath(const char*);
 
-        /* Getters */
-        const char* getName() const;
-        const uid_t getUID() const;
-        const std::string& getPasswd() const;
-        const char* getHomePath() const;
+        /* == Getters == */
+        /// Getter for user's name
+        const char* getName(void) const;
+
+        /// Getter for user's ID
+        const uid_t getUID(void) const;
+
+        /// Getter for the provided password
+        const std::string& getPasswd(void) const;
+
+        /// Getter for the user home path
+        const char* getHomePath(void) const;
 
         /* == Other methods == */
-
         /**
-         * @brief Check if the username is correct.
+         * @brief Check if user can authenticate with the current credentials.
          *
-         * @return True if correct, otherwise incorrect.
+         * Check if the user can authenticate via /etc/pam.d/login with the
+         * provided credentials.
+         *
+         * @return True if the credentials are correct, otherwise false if
+         * incorrect credentials.
          */
-        bool checkLogin();
+        bool checkLogin(void);
 
     private:
         char name[LOGIN_NAME_MAX + 1]; /* +1 for NULL terminator */

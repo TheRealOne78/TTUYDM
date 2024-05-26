@@ -15,34 +15,42 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/// Project name
 #ifndef PROJECT_NAME
   #define PROJECT_NAME "ttuydm"
 #endif
 
+/// Project name in a long format
 #ifndef PROJECT_NAME_LONG
   #define PROJECT_NAME_LONG "TeleTYpewriter + Text-based User Interface Display Manager"
 #endif
 
+/// Project author's name
 #ifndef AUTHOR_NAME
   #define AUTHOR_NAME "TheRealOne78"
 #endif
 
+/// Project author's E-Mail
 #ifndef AUTHOR_EMAIL
   #define AUTHOR_EMAIL "bajcsielias78@gmail.com"
 #endif
 
+/// Project version string
 #ifndef __VERSION_STR
   #define __VERSION_STR "0.0.1-alpha"
 #endif
 
+/// Git ID hash - short version
 #ifndef GIT_HASH_SHORT
   #define GIT_HASH_SHORT "N/A"
 #endif
 
+/// Git ID hash - long version
 #ifndef GIT_HASH_LONG
   #define GIT_HASH_LONG "N/A"
 #endif
 
+/// Project upstream source code
 #ifndef SRC_URI
   #define SRC_URI "https://github.com/TheRealOne78/TTUYDM.git"
 #endif

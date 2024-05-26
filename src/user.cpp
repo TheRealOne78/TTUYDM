@@ -23,7 +23,7 @@
 #include <spdlog/logger.h>
 #include <spdlog/spdlog.h>
 
-User::User() {
+User::User(void) {
     this->passwd = new std::string;
 }
 
@@ -51,25 +51,25 @@ void User::setHomePath(const char* home_path) {
 }
 
 /* Getters */
-const char* User::getName() const {
+const char* User::getName(void) const {
     return this->name;
 }
 
-const uid_t User::getUID() const {
+const uid_t User::getUID(void) const {
     return this->uid;
 }
 
-const std::string& User::getPasswd() const {
+const std::string& User::getPasswd(void) const {
     return *this->passwd;
 }
 
-const char* User::getHomePath() const {
+const char* User::getHomePath(void) const {
     return this->home_path;
 }
 
 /* == Other methods == */
 
-bool User::checkLogin() {
+bool User::checkLogin(void) {
     pam_handle_t* pamh = nullptr;
 
     /* Define the PAM conversation function using a lambda */

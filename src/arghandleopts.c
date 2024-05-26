@@ -20,19 +20,6 @@
 #include <getopt.h>
 #include <stdlib.h>
 
-/**
- * @brief Handle CLI arguments with getopt
- *
- * Handle the command line arguments using getopt.
- * This should run first after main() gets called because this just handles
- * version and help printing when the user requests that.
- *
- * @param argc Points to argc (argument count)
- *
- * @param argv Directly has argv (argument values).
- *
- * @return None.
- */
 void argHandleOpts(int* argc, char* argv[]) {
 
     static struct option long_options [] = {
