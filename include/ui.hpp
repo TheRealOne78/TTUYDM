@@ -42,7 +42,7 @@ class UI {
 
         /**
          * @brief Initiate text in the this->help_str STL vector
-         * hei
+         *
          * @return None.
          */
         void initHelpStr();
