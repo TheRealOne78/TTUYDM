@@ -6,7 +6,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 set("${PROJECT_NAME}_SRC"
   main.cpp
   arghandleopts.c
-  signal-handlers.c
   ttuydm.cpp
   version-help.c
 )
@@ -22,6 +21,7 @@ set("${PROJECT_NAME}_USERS_SRC"
 )
 
 set("${PROJECT_NAME}_UI_SRC"
+  signal-handlers.c
   ui-passwordentry.cpp
   ui-sessionentry.cpp
   ui-userentry.cpp

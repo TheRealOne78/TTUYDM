@@ -17,6 +17,8 @@
 
 #include "signal-handlers.h"
 
+bool IS_SIGINT_TRIGGERED = false;
+
 void handler_sigint(int signum) {
     IS_SIGINT_TRIGGERED = true;
 }

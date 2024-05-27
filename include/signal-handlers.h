@@ -23,12 +23,12 @@
 extern "C" {
 #endif
 
-#include "stdbool.h"
+    #include <stdbool.h>
 
     /**
      * Check if SIGINT was called.
      */
-    bool IS_SIGINT_TRIGGERED;
+    extern bool IS_SIGINT_TRIGGERED;
 
     /**
      * @brief Reset password buffer when program receiving ^C (SIGINT)

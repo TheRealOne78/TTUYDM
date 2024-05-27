@@ -17,10 +17,12 @@
 
 #include "ui.hpp"
 #include "ui-passwordentry.hpp"
+#include <csignal>
 #include <string.h>
 #include <curses.h>
 #include <vector>
 #include <spdlog/spdlog.h>
+#include "signal-handlers.h"
 
 UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     : users(users), sessions(sessions) {
@@ -69,6 +71,9 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, users);
     passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
     session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
+
+    /* Start handling CTRL+C */
+    signal(SIGINT, handler_sigint);
 }
 
 UI::~UI(void) {
