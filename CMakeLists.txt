@@ -50,6 +50,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 # ncurses
 find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 
 # PAM (Pluggable Authentication Modules)
 find_package(PAM REQUIRED)

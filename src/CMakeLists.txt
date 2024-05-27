@@ -26,6 +26,7 @@ set("${PROJECT_NAME}_UI_SRC"
   ui-sessionentry.cpp
   ui-userentry.cpp
   ui.cpp
+  ui-time.cpp
 )
 
 add_library("${PROJECT_NAME}_sessions"
@@ -61,10 +62,11 @@ target_link_libraries("${PROJECT_NAME}"
   "${PROJECT_NAME}_users"
   "${PROJECT_NAME}_ui"
 
-
   "${CURSES_LIBRARIES}"
+  panel
   "${PAM_LIBRARIES}"
-  spdlog::spdlog)
+  spdlog::spdlog
+  )
 
 # Set the output directory for executables
 set(EXECUTABLE_OUTPUT_PATH

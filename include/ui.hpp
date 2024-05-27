@@ -19,6 +19,7 @@
 #define __UI_HPP__
 
 #include <curses.h>
+#include <panel.h>
 #include <string>
 #include <vector>
 
@@ -135,15 +136,17 @@ class UI {
         char*    entered_password;
         uint64_t entered_password_length;
 
-        // |> WINDOWS
+        // |> WINDOWS/PANELS
         /* Bars */
         WINDOW *top_bar_window, *bottom_bar_window;
+        PANEL *top_bar_panel, *bottom_bar_panel;
 
         /* Login entries */
         WINDOW *entries_window;
 
         /* Help menu */
         WINDOW *help_menu_window;
+        PANEL *help_menu_panel;
         // <|
 
         std::vector<std::string>* help_str;

@@ -18,11 +18,13 @@
 #include "ui.hpp"
 #include "ui-passwordentry.hpp"
 #include <csignal>
+#include <panel.h>
 #include <string.h>
 #include <curses.h>
 #include <vector>
 #include <spdlog/spdlog.h>
 #include "signal-handlers.h"
+#include "ui-time.hpp"
 
 UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     : users(users), sessions(sessions) {
@@ -34,15 +36,24 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     if(! curs_set(0))
         spdlog::info("This virtual terminal doesn't support cursor hiding");
 
+    if(noecho() != 0) {
+        spdlog::error("Couldn't set terminal output to 'noecho'");
+        exit(1);
+    }
+
+
     /* Get maximum  */
     refreshMaxResolution();
 
     /* Init all windows right now */
     top_bar_window    = newwin(TOP_BAR_WINDOW_HEIGHT, x_max, 0, 0);
+    top_bar_panel     = new_panel(top_bar_window);
+
     bottom_bar_window = newwin(BOTTOM_BAR_WINDOW_HEIGHT,
                                x_max,
                                (y_max - BOTTOM_BAR_WINDOW_HEIGHT),
                                0);
+    bottom_bar_panel  = new_panel(bottom_bar_window);
 
     entries_window    = newwin(ENTRIES_WINDOW_HEIGHT,
                                ENTRIES_WINDOW_WIDTH,
@@ -59,6 +70,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
                                (int)(60),
                                ((y_max/2) - (int)(22 / 2)),  /* center y */
                                ((x_max/2) - (int)(60 / 2))); /* center x */
+    help_menu_panel   = new_panel(help_menu_window);
 
     /*
      * Write help into memory immediatelly after the creation of
@@ -67,20 +79,63 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     this->initHelpStr();
     this->drawHelp();
 
+    /* Write Header and Footer in memory */
+    this->drawHeaderBar();
+    this->drawFooterBar();
+
     /* Init entries */
     user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, users);
     passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
     session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
 
     /* Start handling CTRL+C */
-    signal(SIGINT, handler_sigint);
+    //signal(SIGINT, handler_sigint);
+
+    /* Refresh */
+    refresh();
+
+    ///* Draw header and footer onto screen  */
+    update_panels();
+    doupdate();
+    //wrefresh(top_bar_window);
+    //wrefresh(bottom_bar_window);
+
+
+    while(1) {
+        /* Temporary demo */
+        // Wait for user input before hiding the window
+        getch();
+
+        // Hide the panel
+        hide_panel(help_menu_panel);
+
+        // Refresh to update the display
+        update_panels();
+        doupdate();
+
+        // Wait for user input before showing the window again
+        getch();
+
+        // Show the panel (window)
+        show_panel(help_menu_panel);
+
+        // Refresh to update the display
+        update_panels();
+        doupdate();
+    }
 }
 
 UI::~UI(void) {
-    /* Delete all windows */
+    /* Delete all windows+panels */
+    del_panel(top_bar_panel);
     delwin(top_bar_window);
+
+    del_panel(bottom_bar_panel);
     delwin(bottom_bar_window);
+
     delwin(entries_window);
+
+    del_panel(help_menu_panel);
     delwin(help_menu_window);
 
     /* delete entries */
@@ -147,22 +202,26 @@ void UI::drawHelp(void) {
 /* Bars */
 void UI::drawHeaderBar(void) {
     this->drawTime();
-
     /* Draw horizontal line */
-    mvwprintw(bottom_bar_window, 1, 0, "%s", std::string(this->x_max, '_').c_str());
+    mvwprintw(top_bar_window, 1, 0, "%s", std::string(this->x_max, '_').c_str());
 
-    wrefresh(top_bar_window);
+    //wrefresh(top_bar_window);
     //TODO
 }
 
 void UI::drawFooterBar(void) {
     mvwprintw(bottom_bar_window, 0, 0, "F1 - Help");
-    wrefresh(bottom_bar_window);
+    //wrefresh(bottom_bar_window);
 }
 
 /* Windows */
 void UI::drawTime() {
+    //NOTE: demo
+    std::string tmp_date_time = getCurrentDateTime();
 
+    mvwprintw(top_bar_window,
+              0, x_max - tmp_date_time.size(),
+              "%s", tmp_date_time.c_str());
     //TODO
 }
 
