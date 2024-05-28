@@ -18,7 +18,6 @@
 #include "ui.hpp"
 #include "ui-passwordentry.hpp"
 #include <chrono>
-#include <csignal>
 #include <panel.h>
 #include <string.h>
 #include <curses.h>
@@ -115,7 +114,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         hide_panel(help_menu_panel);
 
         // Refresh to update the display
-        mtx_upd
+        mtx_try_upd
 
         // Wait for user input before showing the window again
         getch();
@@ -124,7 +123,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         show_panel(help_menu_panel);
 
         // Refresh to update the display
-        mtx_upd
+        mtx_try_upd
     }
 }
 
