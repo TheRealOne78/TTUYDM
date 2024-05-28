@@ -28,6 +28,12 @@
 #include "ui-passwordentry.hpp"
 #include "ui-sessionentry.hpp"
 
+enum color_pairs {
+_color_header = 1,
+_color_warning,
+_color_error
+};
+
 /**
  * @brief Handle everything related to the TUI
  */
@@ -132,6 +138,8 @@ class UI {
 
         int voidHandler();
 
+        void initColorPairs();
+
     private:
         /* == DATA == */
         int x_max, y_max;
@@ -165,7 +173,7 @@ class UI {
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT
-# define TOP_BAR_WINDOW_HEIGHT 2    // two borders
+# define TOP_BAR_WINDOW_HEIGHT 1    // no borders
 #endif
 
 #ifndef BOTTOM_BAR_WINDOW_HEIGHT

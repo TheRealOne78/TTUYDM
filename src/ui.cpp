@@ -42,24 +42,26 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         exit(1);
     }
 
+    /* Initialize color pairs */
+    this->initColorPairs();
 
     /* Get maximum  */
-    refreshMaxResolution();
+    this->refreshMaxResolution();
 
     /* Init all windows right now */
-    top_bar_window    = newwin(TOP_BAR_WINDOW_HEIGHT, x_max, 0, 0);
-    top_bar_panel     = new_panel(top_bar_window);
+    this->top_bar_window    = newwin(TOP_BAR_WINDOW_HEIGHT, x_max, 0, 0);
+    this->top_bar_panel     = new_panel(top_bar_window);
 
-    bottom_bar_window = newwin(BOTTOM_BAR_WINDOW_HEIGHT,
-                               x_max,
-                               (y_max - BOTTOM_BAR_WINDOW_HEIGHT),
-                               0);
-    bottom_bar_panel  = new_panel(bottom_bar_window);
+    this->bottom_bar_window = newwin(BOTTOM_BAR_WINDOW_HEIGHT,
+                                     x_max,
+                                     (y_max - BOTTOM_BAR_WINDOW_HEIGHT),
+                                     0);
+    this->bottom_bar_panel  = new_panel(bottom_bar_window);
 
-    entries_window    = newwin(ENTRIES_WINDOW_HEIGHT,
-                               ENTRIES_WINDOW_WIDTH,
-                               ((y_max/2) - (ENTRIES_WINDOW_HEIGHT/2)),  /* center y */
-                               ((x_max/2) - (ENTRIES_WINDOW_HEIGHT/2))); /* center x */
+    this->entries_window    = newwin(ENTRIES_WINDOW_HEIGHT,
+                                     ENTRIES_WINDOW_WIDTH,
+                                     ((y_max/2) - (ENTRIES_WINDOW_HEIGHT/2)),  /* center y */
+                                     ((x_max/2) - (ENTRIES_WINDOW_HEIGHT/2))); /* center x */
 
     //TODO: Implement something more dynamic, like this
     //help_menu_window  = newwin((int)(y_max * .7f),                    /* 70% of y_max */
@@ -67,11 +69,11 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     //                           ((y_max/2) - (int)(y_max * .7f / 2)),  /* center y */
     //                           ((x_max/2) - (int)(x_max * .7f / 2))); /* center x */
 
-    help_menu_window  = newwin((int)(22),
-                               (int)(60),
-                               ((y_max/2) - (int)(22 / 2)),  /* center y */
-                               ((x_max/2) - (int)(60 / 2))); /* center x */
-    help_menu_panel   = new_panel(help_menu_window);
+    this->help_menu_window  = newwin((int)(22),
+                                     (int)(60),
+                                     ((y_max/2) - (int)(22 / 2)),  /* center y */
+                                     ((x_max/2) - (int)(60 / 2))); /* center x */
+    this->help_menu_panel   = new_panel(help_menu_window);
 
     /*
      * Write help into memory immediatelly after the creation of
@@ -85,9 +87,9 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     this->drawFooterBar();
 
     /* Init entries */
-    user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, users);
-    passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
-    session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
+    this->user_entry    = new UserEntry(entries_window    , 2, 2, ENTRIES_WINDOW_WIDTH - 4, users);
+    this->passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
+    this->session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
 
     /* Start handling CTRL+C */
     //signal(SIGINT, handler_sigint);
@@ -196,19 +198,17 @@ void UI::drawHelp(void) {
 
 /* Bars */
 void UI::drawHeaderBar(void) {
+    /* Fill */
+    wbkgd(this->top_bar_window, COLOR_PAIR(_color_header));
+
     std::thread time_date_thread([this]() { this->drawTime(); });
     time_date_thread.detach();
-
-    /* Draw horizontal line */
-    mvwprintw(top_bar_window, 1, 0, "%s", std::string(this->x_max, '_').c_str());
-
-    //wrefresh(top_bar_window);
-    //TODO
 }
 
 void UI::drawFooterBar(void) {
+    wattron(bottom_bar_window , A_BOLD);
     mvwprintw(bottom_bar_window, 0, 0, "F1 - Help");
-    //wrefresh(bottom_bar_window);
+    wattroff(bottom_bar_window, A_BOLD);
 }
 
 void UI::drawTime() {
@@ -216,26 +216,19 @@ void UI::drawTime() {
     std::string tmp_date_time;
 
     while (1) {
+        /* Update current date and time in the string */
+        tmp_date_time = getCurrentDateTime();
 
-        /*
-         * Update without mtx_try_upd macro just not to waste CPU cycles when
-         * updating tmp_date_time, because there's not reason to update this
-         * string when not showing it anyway
-         */
-        if (mutex_update_panels.try_lock()) {
-            /* Update current date and time in the string */
-            tmp_date_time = getCurrentDateTime();
 
-            /* Update the current date and time in the memory */
-            mvwprintw(top_bar_window,
-                      0, x_max - tmp_date_time.size(),
-                      "%s", tmp_date_time.c_str());
+        attron(COLOR_PAIR(_color_header));
+        /* Update the current date and time in the memory */
+        mvwprintw(top_bar_window,
+                  0, x_max - tmp_date_time.size(),
+                  "%s", tmp_date_time.c_str());
+        attroff(COLOR_PAIR(_color_header));
 
-            /* update */
-            update_panels();
-            doupdate();
-            mutex_update_panels.unlock();
-        }
+        /* update */
+        mtx_try_upd
 
         /* Wait 150ms */
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
@@ -287,4 +280,23 @@ void UI::wPrintWrap(WINDOW *win,
             current_x++;
         }
     }
+}
+
+void UI::initColorPairs() {
+    if (!has_colors()) {
+        spdlog::info("Terminal does not support colors");
+        return;
+    }
+
+    start_color();
+    use_default_colors();
+    if (can_change_color()) {
+        // Initialize true color support
+        assume_default_colors(-1, -1);
+    }
+
+    init_pair(_color_header, COLOR_BLACK, COLOR_GREEN);
+
+    init_pair(_color_warning, COLOR_YELLOW, -1);
+    init_pair(_color_error, COLOR_RED, -1);
 }
