@@ -17,14 +17,15 @@
 
 #include "ui.hpp"
 #include "ui-passwordentry.hpp"
+#include <chrono>
 #include <csignal>
 #include <panel.h>
 #include <string.h>
 #include <curses.h>
 #include <vector>
 #include <spdlog/spdlog.h>
-#include "signal-handlers.h"
 #include "ui-time.hpp"
+#include <thread>
 
 UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     : users(users), sessions(sessions) {
@@ -95,11 +96,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     refresh();
 
     ///* Draw header and footer onto screen  */
-    update_panels();
-    doupdate();
-    //wrefresh(top_bar_window);
-    //wrefresh(bottom_bar_window);
-
+    mtx_upd
 
     while(1) {
         /* Temporary demo */
@@ -110,8 +107,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         hide_panel(help_menu_panel);
 
         // Refresh to update the display
-        update_panels();
-        doupdate();
+        mtx_upd
 
         // Wait for user input before showing the window again
         getch();
@@ -120,8 +116,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         show_panel(help_menu_panel);
 
         // Refresh to update the display
-        update_panels();
-        doupdate();
+        mtx_upd
     }
 }
 
@@ -201,7 +196,9 @@ void UI::drawHelp(void) {
 
 /* Bars */
 void UI::drawHeaderBar(void) {
-    this->drawTime();
+    std::thread time_date_thread([this]() { this->drawTime(); });
+    time_date_thread.detach();
+
     /* Draw horizontal line */
     mvwprintw(top_bar_window, 1, 0, "%s", std::string(this->x_max, '_').c_str());
 
@@ -214,15 +211,35 @@ void UI::drawFooterBar(void) {
     //wrefresh(bottom_bar_window);
 }
 
-/* Windows */
 void UI::drawTime() {
-    //NOTE: demo
-    std::string tmp_date_time = getCurrentDateTime();
+    /* Create temporary string to get the current time/date */
+    std::string tmp_date_time;
 
-    mvwprintw(top_bar_window,
-              0, x_max - tmp_date_time.size(),
-              "%s", tmp_date_time.c_str());
-    //TODO
+    while (1) {
+
+        /*
+         * Update without mtx_try_upd macro just not to waste CPU cycles when
+         * updating tmp_date_time, because there's not reason to update this
+         * string when not showing it anyway
+         */
+        if (mutex_update_panels.try_lock()) {
+            /* Update current date and time in the string */
+            tmp_date_time = getCurrentDateTime();
+
+            /* Update the current date and time in the memory */
+            mvwprintw(top_bar_window,
+                      0, x_max - tmp_date_time.size(),
+                      "%s", tmp_date_time.c_str());
+
+            /* update */
+            update_panels();
+            doupdate();
+            mutex_update_panels.unlock();
+        }
+
+        /* Wait 150ms */
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    }
 }
 
 void UI::drawPasswordFailedAttempts(WINDOW* win) {

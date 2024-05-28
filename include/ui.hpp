@@ -22,6 +22,7 @@
 #include <panel.h>
 #include <string>
 #include <vector>
+#include <mutex>
 
 #include "ui-userentry.hpp"
 #include "ui-passwordentry.hpp"
@@ -129,6 +130,8 @@ class UI {
                         const char* STR);
         // <|
 
+        int voidHandler();
+
     private:
         /* == DATA == */
         int x_max, y_max;
@@ -157,6 +160,8 @@ class UI {
 
         std::vector<std::string> users;
         std::vector<std::string> sessions;
+
+        std::mutex mutex_update_panels;
 };
 
 #ifndef TOP_BAR_WINDOW_HEIGHT
@@ -174,5 +179,23 @@ class UI {
 #ifndef ENTRIES_WINDOW_WIDTH
 # define ENTRIES_WINDOW_WIDTH 30
 #endif
+
+
+#ifndef mtx_upd
+# define mtx_upd \
+        mutex_update_panels.lock();  \
+        update_panels();             \
+        doupdate();                  \
+        mutex_update_panels.unlock();
+#endif /* mtx_upd */
+
+#ifndef mtx_try_upd
+# define mtx_try_upd \
+        if (mutex_update_panels.try_lock()) {   \
+                update_panels();                \
+                doupdate();                     \
+                mutex_update_panels.unlock();   \
+        }
+#endif /* mtx_try_upd */
 
 #endif // __UI_HPP__
