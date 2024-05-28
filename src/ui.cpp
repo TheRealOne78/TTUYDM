@@ -42,6 +42,12 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         exit(1);
     }
 
+    /// TODO: Do this in the input handler
+    //if (raw() != 0) {
+    //    spdlog::error("Couldn't set terminal input to raw");
+    //    exit(1);
+    //}
+
     /* Initialize color pairs */
     this->initColorPairs();
 
