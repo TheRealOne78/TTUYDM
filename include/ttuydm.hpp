@@ -23,7 +23,6 @@
  *
  * TTUYDM is a text-based user interface display manager responsible for managing
  * text-based user interfaces.
- * </pre>
  *
  * @section license_sec License
  *
