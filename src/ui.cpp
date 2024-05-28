@@ -96,9 +96,6 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
     this->passwd_entry  = new PasswordEntry(entries_window, 4, 2, ENTRIES_WINDOW_WIDTH - 4);
     this->session_entry = new SessionEntry(entries_window , 6, 2, ENTRIES_WINDOW_WIDTH - 4, sessions);
 
-    /* Start handling CTRL+C */
-    //signal(SIGINT, handler_sigint);
-
     /* Refresh */
     refresh();
 
@@ -114,7 +111,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         hide_panel(help_menu_panel);
 
         // Refresh to update the display
-        mtx_try_upd
+        mtx_upd
 
         // Wait for user input before showing the window again
         getch();
@@ -123,7 +120,7 @@ UI::UI(std::vector<std::string> users, std::vector<std::string> sessions)
         show_panel(help_menu_panel);
 
         // Refresh to update the display
-        mtx_try_upd
+        mtx_upd
     }
 }
 
